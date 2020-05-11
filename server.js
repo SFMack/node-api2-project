@@ -7,6 +7,8 @@ const server = express();
 server.use(express());
 server.use(express.json());
 
+// POSTS
+//
 // get all posts
 server.get("/api/posts", (req, res) => {
   db.find()
@@ -46,6 +48,33 @@ server.post("/api/posts", (req, res) => {
     })
     .catch(err =>
       res.status(400).json({ message: `User was not created\n${err}` })
+    );
+});
+
+// COMMENTS
+//
+// get all comments
+server.get("/api/posts/:id/comments", (req, res) => {
+  const { id } = req.params;
+  db.findPostComments(id)
+    .then(comment => {
+      res.status(200).json(comment);
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(500)
+        .json({ message: "The comments information could not be retrieved" });
+    });
+});
+
+// add a comment to a specific post
+server.post("/api/posts/:id/comments", (req, res) => {
+  const newComment = req.body;
+  db.insertComment(newComment)
+    .then(comment => res.status(201).json(comment))
+    .catch(err =>
+      res.status(400).json({ message: `Comment was not added.\n${err}` })
     );
 });
 
