@@ -1,116 +1,13 @@
 const express = require("express");
-
-const db = require("./data/db.js");
-
 const server = express();
+const postsRouter = require("./routers/posts-router.js");
 
 server.use(express());
+server.use("/api/posts", postsRouter);
 server.use(express.json());
 
-// POSTS
-//
-// get all posts
-server.get("/api/posts", (req, res) => {
-  db.find()
-    .then(posts => {
-      res.status(200).json(posts);
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({
-        error: "The posts information could not be retrieved.",
-      });
-    });
-});
-
-// get a specific post
-server.get("/api/posts/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.findById(id).then(post => {
-    if (post) {
-      res.status(200).json(post);
-    } else {
-      res
-        .status(404)
-        .json({ message: "The post with the specified ID does not exist." });
-    }
-  });
-});
-
-// add a post
-server.post("/api/posts", (req, res) => {
-  const newPost = req.body;
-  console.log(newPost);
-  db.insert(newPost)
-    .then(post => {
-      res.status(201).json(post);
-    })
-    .catch(err =>
-      res.status(400).json({ message: `User was not created\n${err}` })
-    );
-});
-
-// delete a post
-server.delete("/api/posts/:id", (req, res) => {
-  const postToDelete = req.params.id;
-  console.log(postToDelete);
-  db.remove(postToDelete)
-    .then(post => {
-      res.status(201).json(post);
-    })
-    .catch(err =>
-      res.status(404).json({ message: `User was not deleted\n${err}` })
-    );
-});
-
-// update a post
-server.put("/api/posts/:id", (req, res) => {
-  const postToUpdate = req.params.id;
-  console.log(postToUpdate);
-  const updatedPost = req.body;
-  if (!req.body.title || !req.body.contents) {
-    res.status(400).json({
-      errorMessage: "Please provide title and contents for the post.",
-    });
-  } else {
-    db.update(postToUpdate, updatedPost)
-      .then(newPost => {
-        res.status(200).json({ message: `Your new user was created` });
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ message: `Post could not be modified \n${err}` });
-      });
-  }
-});
-
-// COMMENTS
-//
-// get all comments
-server.get("/api/posts/:id/comments", (req, res) => {
-  const { id } = req.params;
-  db.findPostComments(id)
-    .then(comment => {
-      res.status(200).json(comment);
-    })
-    .catch(err => {
-      console.log(err);
-      res
-        .status(500)
-        .json({ message: "The comments information could not be retrieved" });
-    });
-});
-
-// add a comment to a specific post
-server.post("/api/posts/:id/comments", (req, res) => {
-  const newComment = req.body;
-  db.insertComment(newComment)
-    .then(comment => res.status(201).json(comment))
-    .catch(err =>
-      res.status(400).json({ message: `Comment was not added.\n${err}` })
-    );
+server.get("/", (req, res) => {
+  res.send(`<h2>Welcome to the Node API2 Project Server</h2>`);
 });
 
 module.exports = server;
