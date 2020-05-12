@@ -76,7 +76,7 @@ server.put("/api/posts/:id", (req, res) => {
   } else {
     db.update(postToUpdate, updatedPost)
       .then(newPost => {
-        res.status(200).json(newPost);
+        res.status(200).json({ message: `Your new user was created` });
       })
       .catch(err => {
         res
