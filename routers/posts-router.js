@@ -7,7 +7,7 @@ const router = express.Router();
 // POSTS
 //
 // get all posts
-router.get("/api/posts", (req, res) => {
+router.get("/", (req, res) => {
   db.find()
     .then(posts => {
       res.status(200).json(posts);
@@ -21,7 +21,7 @@ router.get("/api/posts", (req, res) => {
 });
 
 // get a specific post
-router.get("/api/posts/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   const { id } = req.params;
 
   db.findById(id).then(post => {
@@ -36,7 +36,7 @@ router.get("/api/posts/:id", (req, res) => {
 });
 
 // add a post
-router.post("/api/posts", (req, res) => {
+router.post("/", (req, res) => {
   const newPost = req.body;
   console.log(newPost);
   db.insert(newPost)
@@ -49,7 +49,7 @@ router.post("/api/posts", (req, res) => {
 });
 
 // delete a post
-router.delete("/api/posts/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const postToDelete = req.params.id;
   console.log(postToDelete);
   db.remove(postToDelete)
@@ -62,7 +62,7 @@ router.delete("/api/posts/:id", (req, res) => {
 });
 
 // update a post
-router.put("/api/posts/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const postToUpdate = req.params.id;
   console.log(postToUpdate);
   const updatedPost = req.body;
@@ -86,7 +86,7 @@ router.put("/api/posts/:id", (req, res) => {
 // POST COMMENTS
 //
 // get all comments
-router.get("/api/posts/:id/comments", (req, res) => {
+router.get("/:id/comments", (req, res) => {
   const { id } = req.params;
   db.findPostComments(id)
     .then(comment => {
@@ -101,7 +101,7 @@ router.get("/api/posts/:id/comments", (req, res) => {
 });
 
 // add a comment to a specific post
-router.post("/api/posts/:id/comments", (req, res) => {
+router.post("/:id/comments", (req, res) => {
   const newComment = req.body;
   db.insertComment(newComment)
     .then(comment => res.status(201).json(comment))
