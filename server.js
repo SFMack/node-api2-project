@@ -65,7 +65,26 @@ server.delete("/api/posts/:id", (req, res) => {
 });
 
 // update a post
-server.put("/api/posts/:id", (req, res) => {});
+server.put("/api/posts/:id", (req, res) => {
+  const postToUpdate = req.params.id;
+  console.log(postToUpdate);
+  const updatedPost = req.body;
+  if (!req.body.title || !req.body.contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    db.update(postToUpdate, updatedPost)
+      .then(newPost => {
+        res.status(200).json(newPost);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ message: `Post could not be modified \n${err}` });
+      });
+  }
+});
 
 // COMMENTS
 //
