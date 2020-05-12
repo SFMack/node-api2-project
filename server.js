@@ -51,6 +51,22 @@ server.post("/api/posts", (req, res) => {
     );
 });
 
+// delete a post
+server.delete("/api/posts/:id", (req, res) => {
+  const postToDelete = req.params.id;
+  console.log(postToDelete);
+  db.remove(postToDelete)
+    .then(post => {
+      res.status(201).json(post);
+    })
+    .catch(err =>
+      res.status(404).json({ message: `User was not deleted\n${err}` })
+    );
+});
+
+// update a post
+server.put("/api/posts/:id", (req, res) => {});
+
 // COMMENTS
 //
 // get all comments
