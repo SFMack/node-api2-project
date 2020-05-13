@@ -36,16 +36,19 @@ router.get("/:id", (req, res) => {
 });
 
 // add a post
+// router.post("/", (req, res) => {
+//   const newPost = req.body;
+//   console.log(newPost);
+//   db.insert(newPost)
+//     .then(post => {
+//       res.status(201).json(post);
+//     })
+//     .catch(err =>
+//       res.status(400).json({ message: `User was not created\n${err}` })
+//     );
+// });
 router.post("/", (req, res) => {
-  const newPost = req.body;
-  console.log(newPost);
-  db.insert(newPost)
-    .then(post => {
-      res.status(201).json(post);
-    })
-    .catch(err =>
-      res.status(400).json({ message: `User was not created\n${err}` })
-    );
+  console.log(req.body);
 });
 
 // delete a post
@@ -66,6 +69,7 @@ router.put("/:id", (req, res) => {
   const postToUpdate = req.params.id;
   console.log(postToUpdate);
   const updatedPost = req.body;
+  console.log(updatedPost);
   if (!req.body.title || !req.body.contents) {
     res.status(400).json({
       errorMessage: "Please provide title and contents for the post.",
